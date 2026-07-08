@@ -4,24 +4,39 @@ classDiagram
     class Task {
         +String name
         +int duration
+        +bool completed
+        +String recurrence
+        +Date dueDate
+        +Time startTime
+        +String petName
+        +next_occurrence() Task
+        +mark_complete() Task
     }
 
     class Pet {
         +String name
         +String animalType
         +int age
+        +List~Task~ tasks
+        +add_task(task) void
+        +complete_task(task) Task
     }
 
     class Owner {
         +String name
         +int availableTime
+        +Pet pet
+        +add_pet(pet) void
     }
 
     class Plan {
         +String ownerName
         +String petName
-        +List~Task~ tasks
         +int leftoverTime
+        +List~Task~ tasks
+        +sort_by_time() List~Task~
+        +filter_by_status(completed) List~Task~
+        +detect_conflicts() List~String~
     }
 
     Owner --> Pet : owns
