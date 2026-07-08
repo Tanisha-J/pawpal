@@ -19,13 +19,15 @@ def main():
     # Give the owner a primary pet (Owner "owns" a Pet).
     owner.pet = biscuit
 
-    # 3. Add at least three tasks with different durations.
+    # 3. Add at least three tasks with different durations — intentionally
+    #    added OUT OF ORDER so sort_by_time() has something to reorder.
+    #    A few are marked completed so filter_by_status() has both cases.
     biscuit.tasks.append(Task(name="Morning walk", duration=30))
-    biscuit.tasks.append(Task(name="Feeding", duration=10))
+    biscuit.tasks.append(Task(name="Feeding", duration=10, completed=True))
     biscuit.tasks.append(Task(name="Grooming", duration=20))
 
-    whiskers.tasks.append(Task(name="Litter cleaning", duration=15))
     whiskers.tasks.append(Task(name="Play time", duration=25))
+    whiskers.tasks.append(Task(name="Litter cleaning", duration=15, completed=True))
 
     # Print a simple summary so we can see the objects were built correctly.
     pets = [biscuit, whiskers]
@@ -56,7 +58,22 @@ def main():
 
     print(f"Plan for {plan.owner_name}:")
     print(f"    Total time for all tasks: {total_task_time} min")
-    print(f"    Leftover available time: {plan.leftover_time} min")
+    print(f"    Leftover available time: {plan.leftover_time} min\n")
+
+    # 4. Sort the plan's tasks by time (shortest first) and print them.
+    print("Tasks sorted by time (shortest first):")
+    for task in plan.sort_by_time():
+        print(f"    - {task.name} ({task.duration} min)")
+    print()
+
+    # 5. Filter the plan's tasks by completion status and print each group.
+    print("Completed tasks:")
+    for task in plan.filter_by_status(completed=True):
+        print(f"    - {task.name} ({task.duration} min)")
+
+    print("Remaining tasks:")
+    for task in plan.filter_by_status(completed=False):
+        print(f"    - {task.name} ({task.duration} min)")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,7 @@
 import streamlit as st
 
+from pawpal_system import Owner, Pet, Task, Plan
+
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
 st.title("🐾 PawPal+")
@@ -40,31 +42,41 @@ st.divider()
 
 st.subheader("Quick Demo Inputs (UI only)")
 owner_name = st.text_input("Owner name", value="Jordan")
+
+# Create the Owner once and keep it across reruns (don't rebuild on refresh).
+if "owner" not in st.session_state:
+    st.session_state.owner = Owner(name=owner_name, available_time=120)
 pet_name = st.text_input("Pet name", value="Mochi")
 species = st.selectbox("Species", ["dog", "cat", "other"])
+age = st.number_input("Pet age", min_value=0, max_value=30, value=2)
+
+# Create the Pet once, nested under the owner (Owner "owns" Pet).
+if st.session_state.owner.pet is None:
+    st.session_state.owner.add_pet(Pet(name=pet_name, animal_type=species, age=int(age)))
+
+pet = st.session_state.owner.pet
 
 st.markdown("### Tasks")
 st.caption("Add a few tasks. In your final version, these should feed into your scheduler.")
 
-if "tasks" not in st.session_state:
-    st.session_state.tasks = []
-
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 with col1:
     task_title = st.text_input("Task title", value="Morning walk")
 with col2:
     duration = st.number_input("Duration (minutes)", min_value=1, max_value=240, value=20)
-with col3:
-    priority = st.selectbox("Priority", ["low", "medium", "high"], index=2)
 
+# Add tasks via the Pet's own method (Pet "has" Tasks) — no separate list needed.
 if st.button("Add task"):
-    st.session_state.tasks.append(
-        {"title": task_title, "duration_minutes": int(duration), "priority": priority}
-    )
+    pet.add_task(Task(name=task_title, duration=int(duration)))
 
-if st.session_state.tasks:
+if pet.tasks:
     st.write("Current tasks:")
-    st.table(st.session_state.tasks)
+    st.table(
+        [
+            {"name": t.name, "duration_minutes": t.duration, "completed": t.completed}
+            for t in pet.tasks
+        ]
+    )
 else:
     st.info("No tasks yet. Add one above.")
 

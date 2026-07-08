@@ -87,10 +87,10 @@ Sample test output:
 
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+| Task sorting | `Plan.sort_by_time()` | Sorts the plan's tasks in place by `duration`, shortest first. |
+| Filtering | `Plan.filter_by_status(completed=...)` | Returns tasks matching a completion status — completed tasks vs. remaining to-dos. |
+| Conflict handling | `Plan.detect_conflicts()` | Flags tasks on the same `due_date` whose `[start, start + duration)` time windows overlap, across the same or different pets, and returns warning messages. |
+| Recurring tasks | `Task.mark_complete()` / `Task.next_occurrence()` / `Pet.complete_task()` | Completing a daily/weekly task auto-creates the next occurrence (today + 1 day or + 7 days via `timedelta`); `Pet.complete_task()` appends it to the pet's list. |
 
 ## 📸 Demo Walkthrough
 
