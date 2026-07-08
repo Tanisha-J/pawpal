@@ -15,6 +15,11 @@ class Task:
 
     name: str
     duration: int  # minutes
+    completed: bool = False  # status: True once the task is done
+
+    def mark_complete(self):
+        """Mark this task as completed."""
+        self.completed = True
 
 
 @dataclass
