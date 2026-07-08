@@ -1,15 +1,30 @@
 classDiagram
-    %% Replace the placeholders below with your actual classes, attributes, methods, and relationships.
-    %% Keep this file updated so it matches your final implementation.
+    %% PawPal+ class diagram
 
-    class ClassName {
-        +type attribute
-        +method() returnType
+    class Task {
+        +String name
+        +int duration
     }
 
-    class AnotherClass {
-        +type attribute
-        +method() returnType
+    class Pet {
+        +String name
+        +String animalType
+        +int age
     }
 
-    ClassName --> AnotherClass : relationship
+    class Owner {
+        +String name
+        +int availableTime
+    }
+
+    class Plan {
+        +String ownerName
+        +String petName
+        +int leftoverTime
+    }
+
+    Owner --> Pet : owns
+    Pet --> Task : has
+    Plan --> Owner : summarizes
+    Plan --> Pet : summarizes
+    Plan --> Task : schedules
